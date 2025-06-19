@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./docker/auth-service.Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - MONGO_URI=mongodb://mongo:27017
+    depends_on:
+      - mongo
+    networks:
+      - usercore_net
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - usercore_net
+
+volumes:
+  mongo_data:
+
+networks:
+  usercore_net:
+    driver: bridge
