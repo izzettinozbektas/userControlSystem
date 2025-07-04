@@ -1,16 +1,19 @@
-FROM golang:1.22
+FROM golang:1.24
 
 WORKDIR /app
 
-COPY ./auth-service/go.mod ./go.mod
-COPY ./auth-service/go.sum ./go.sum
+RUN go install github.com/air-verse/air@latest
 
-RUN go mod download
+COPY ./auth-service/go.mod ./auth-service/go.sum ./auth-service/
+
+WORKDIR /app/auth-service
+
+RUN go mod tidy
 
 COPY ./auth-service/. .
 
-RUN go build -o auth-service ./cmd/main.go
+COPY ./auth-service/air.toml ./
 
 EXPOSE 8080
 
-CMD ["./auth-service"]
+CMD ["air"]

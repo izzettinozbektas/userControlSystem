@@ -10,6 +10,8 @@ services:
     environment:
       - PORT=8080
       - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./auth-service:/app/auth-service
     depends_on:
       - mongo
     networks:
